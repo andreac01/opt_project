@@ -5,6 +5,8 @@ import torch.optim as optim
 import pickle
 from filter_wise_normalization import get_loss_surface_3Dplot, get_loss_surface_plot, get_deltas, next_trajectory_point
 from tqdm import tqdm
+# Set the seed for reproducibility
+torch.manual_seed(42)
 
 # Example neural network model
 class SimpleCNN(nn.Module):
@@ -78,30 +80,54 @@ def train_model(model, num_epochs, criterion, optimizer, inputs, labels):
 		print(f"Epoch [{epoch+1}/{num_epochs}], Loss: {loss.item():.4f}")
 
 def train_model_sgd(model, num_epochs, criterion, optimizer, inputs, labels, batch_size=64):
-	d1, d2, theta = get_deltas(model)
-	trajectory = []
+	losses = []
+	# Divide inputs and labels into training and evaluation sets
+	train_size = int(0.9 * inputs.size(0))
+	train_inputs = inputs[:train_size]
+	train_labels = labels[:train_size]
+	eval_inputs = inputs[train_size:]
+	eval_labels = labels[train_size:]
+	best_loss = float('inf')
 	# Train the model
 	for epoch in range(num_epochs):
 		# iterate over input batches
-		with tqdm(total=inputs.size(0), desc=f"Epoch {epoch+1}/{num_epochs}", unit="batch") as pbar:
-			for i in range(0, inputs.size(0), batch_size):
+		with tqdm(total=train_inputs.size(0), desc=f"Epoch {epoch+1}/{num_epochs}", unit="batch") as pbar:
+			for i in range(0, train_inputs.size(0), batch_size):
 				# Perform forward pass
-				outputs = model(inputs[i:i+batch_size])
-				loss = criterion(outputs, labels[i:i+batch_size])
+				outputs = model(train_inputs[i:i+batch_size])
+				loss = criterion(outputs, train_labels[i:i+batch_size])
 
 				# Perform backward pass and optimization
 				optimizer.zero_grad()
 				loss.backward()
 				optimizer.step()
 
-				# Get the next trajectory point
-				trajectory.append(next_trajectory_point(model, theta, d1, d2, loss.item()))
+				# Save the losses to repeat same training
+				losses.append(loss)
 
 				# Print the loss for monitoring
 				pbar.set_postfix(loss=loss.item())
 				pbar.update(batch_size)
-	traj_alphas, traj_betas, losses = zip(*trajectory)
-	return traj_alphas, traj_betas, losses
+		
+		# Evaluate the model
+		eval_loss = evaluate_model(model, criterion, eval_inputs, eval_labels)
+		if eval_loss > 1.5 * best_loss:
+			print(f"Early stopping at epoch {epoch+1}")
+			break
+		best_loss = min(best_loss, eval_loss)
+
+		# Remove the unnecessary batch count from the progress bar description
+		pbar.set_description(f"Epoch {epoch+1}/{num_epochs}")
+	return losses
+
+def evaluate_model(model, criterion, inputs, labels):
+	model.eval()
+	# Evaluate the model
+	with torch.no_grad():
+		outputs = model(inputs)
+		loss = criterion(outputs, labels)
+	model.train()
+	return loss
 
 def test_model(model, inputs, labels):
 	# Test the model
@@ -118,15 +144,22 @@ def unpickle(file):
 
 # Create an instance of the model
 model = SimpleNN()
+model_copy = SimpleNN()
+model_copy.load_state_dict(model.state_dict())
 
 # Define the optimizer
 optimizer = optim.SGD(model.parameters(), lr=1e-2, momentum=0.9)
+optimizer_copy = optim.SGD(model_copy.parameters(), lr=1e-2, momentum=0.9)
 
 # Define the loss function
 criterion = nn.CrossEntropyLoss()
 
 # Define the number of epochs
 num_epochs = 10
+
+# Define the batch size
+batch_size = 64
+
 
 # Load the data from data_batch_i for i in range(1, 6)
 # Load all the data into a single data_dict
@@ -139,8 +172,13 @@ num_epochs = 10
 # data_dict[b'data'] = np.array(data_dict[b'data'])
 # data_dict[b'labels'] = np.array(data_dict[b'labels'])
 data_dict = unpickle('./data/data_batch_1')
-data_dict[b'data'] = data_dict[b'data'][:1000]
-data_dict[b'labels'] = data_dict[b'labels'][:1000]
+
+# Data length should be divisible by 10*batch_size
+data_length = data_dict[b'data'].shape[0]-data_dict[b'data'].shape[0]%(10*batch_size)
+print(data_length)
+
+data_dict[b'data'] = data_dict[b'data'][:data_length]
+data_dict[b'labels'] = data_dict[b'labels'][:data_length]
 
 # Extract inputs and labels from the data dictionary
 inputs = torch.tensor(data_dict[b'data']).view(-1, 3, 32, 32)
@@ -167,21 +205,47 @@ target = labels[:1]
 model.train()
 
 # Train the model
-trajectory = train_model_sgd(model, num_epochs, criterion, optimizer, inputs, labels)
+losses = train_model_sgd(model, num_epochs, criterion, optimizer, inputs, labels)
 
+
+###################### PLOTTING ############################
 
 
 # Plot the loss surface
-alphas, betas, _ = trajectory
-max_alpha, min_alpha = max(alphas), min(alphas)
-max_beta, min_beta = max(betas), min(betas)
-epsilon = max(max(max_alpha, max_beta), abs(min(min_alpha, min_beta))) * 1.1
-model.eval()
-get_loss_surface_3Dplot(model, criterion, data, target, epsilon=epsilon, trajectory=trajectory)
-get_loss_surface_plot(model, criterion, data, target, epsilon=epsilon, trajectory=trajectory)
+
+
+train_size = int(0.9 * data_length)
+print(train_size)
+print(inputs[:train_size].shape)
+get_loss_surface_3Dplot(model, criterion, data, target, losses=losses, initial_model=model_copy, optimizer=optimizer_copy, training_inputs=inputs[:train_size], labels=labels[:train_size])
+
+
+
+
+get_loss_surface_plot(model, criterion, data, target)
 model.train()
 
 
+
+
+
+
+
+
+
+
+
+
+
+###################### TESTING ############################
+
+
+
+
+
+
+
+model.eval()
 
 # Test the model
 # Load the test data from test_batch
@@ -206,3 +270,5 @@ print("Test Accuracy:")
 test_model(model, test_inputs, test_labels)
 print("Training Accuracy:")
 test_model(model, inputs, labels)
+
+get_loss_surface_3Dplot(model, criterion, test_inputs, test_labels)#, losses=losses, initial_model=model_copy, optimizer=optimizer_copy, training_inputs=inputs[:train_size], labels=labels[:train_size])
