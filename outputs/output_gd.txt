@@ -1,0 +1,24 @@
+
+GD
+Learning rate: 2
+Early stopping at epoch 8
+Accuracy: 10.72%
+TRAJECTORY COMPUTED
+8 8 8 8
+test  (0.0, 0.0, 0)
+Learning rate: 0.3
+Early stopping at epoch 45
+Accuracy: 17.72%
+TRAJECTORY COMPUTED
+45 45 45 45
+test  (0.0, 0.0, 0)
+Learning rate: 0.02
+Accuracy: 13.79%
+TRAJECTORY COMPUTED
+100 100 100 100
+test  (0.0, 0.0, 0)
+Learning rate: 0.001
+Accuracy: 10.02%
+TRAJECTORY COMPUTED
+100 100 100 100
+test  (0.0, 0.0, 0)

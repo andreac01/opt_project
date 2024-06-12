@@ -3,9 +3,10 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 import pickle
-from filter_wise_normalization import get_loss_surface_3Dplot, get_loss_surface_plot, get_deltas, next_trajectory_point
+from plottings import get_loss_surface_3Dplot, get_loss_surface_plot, get_deltas, next_trajectory_point
 from tqdm import tqdm
 import numpy as np
+from matplotlib.pyplot import close
 # Set the seed for reproducibility
 torch.manual_seed(42)
 
@@ -93,6 +94,7 @@ def train_model_sgd(model, num_epochs, criterion, optimizer, inputs, labels, bat
 	eval_inputs = inputs[train_size:]
 	eval_labels = labels[train_size:]
 	best_loss = float('inf')
+	count = 0
 	# Train the model
 	for epoch in range(num_epochs):
 		# iterate over input batches
@@ -116,9 +118,13 @@ def train_model_sgd(model, num_epochs, criterion, optimizer, inputs, labels, bat
 		
 		# Evaluate the model
 		eval_loss = evaluate_model(model, criterion, eval_inputs, eval_labels)
-		if eval_loss > 1.2 * best_loss or eval_loss > 3:
-			print(f"Early stopping at epoch {epoch+1}")
-			break
+		if eval_loss >= best_loss - 1e-5 or torch.isnan(eval_loss):
+			count += 1
+			if count > 3 or eval_loss > 1.2*best_loss or torch.isnan(eval_loss):
+				print(f"Early stopping at epoch {epoch+1}")
+				break
+		else:
+			count = 0
 		best_loss = min(best_loss, eval_loss)
 
 		# Remove the unnecessary batch count from the progress bar description
@@ -200,55 +206,5 @@ class settings:
 	momentum = 0.9
 	training_split = 0.9
 	criterion = nn.CrossEntropyLoss()
-
-######################################################
-######################## SGD #########################
-######################################################
-
-for batch_size in [1, 64, 256]:
-	for learning_rate in [2, 2e-3, 1e-5]:
-		for momentum in [0, 0.9]:
-			print(f"Batch size: {batch_size}, Learning rate: {learning_rate}, Momentum: {momentum}")
-			# Create an instance of the model
-			model = SimpleCNN()
-			model_copy = SimpleCNN()
-			model_copy.load_state_dict(model.state_dict())
-
-			# Define the optimizer
-			optimizer = optim.SGD(model.parameters(), lr=learning_rate, momentum=momentum)
-			optimizer_copy = optim.SGD(model_copy.parameters(), lr=learning_rate, momentum=momentum)
-
-			inputs, labels = get_data_train()
-			if inputs.shape[0]/batch_size > 1000:
-				inputs = inputs[:1000]
-				labels = labels[:1000]
-			# train data length should be divisible by 20*batch_size
-			inputs_length = inputs.shape[0]-inputs.shape[0]%(10*batch_size)
-			inputs = inputs[:inputs_length]
-			labels = labels[:inputs_length]
-
-			# Train the model
-			losses = train_model_sgd(model, settings.num_epochs, settings.criterion, optimizer, inputs, labels, batch_size=batch_size)
-
-			# Test the model
-			model.eval()
-			test_inputs, test_labels = get_data_test()
-			print(len(test_inputs))
-			# Test the model
-			test_model(model, test_inputs, test_labels)
-			model.train()
-
-			# Plot3d mbatch loss
-			data = test_inputs[:8]
-			target = test_labels[:8]
-			train_size = int(settings.training_split * inputs_length)
-			trajectory = get_loss_surface_3Dplot(model, settings.criterion, data, target, losses=losses, initial_model=model_copy, optimizer=optimizer_copy, training_inputs=inputs[:train_size], labels=labels[:train_size], batch_size=batch_size)
-			# Plot2d mbatch loss
-			get_loss_surface_plot(model, settings.criterion, data, target, losses=losses, initial_model=model_copy, optimizer=optimizer_copy, training_inputs=inputs[:train_size], labels=labels[:train_size], batch_size=batch_size, trajectory=trajectory)
-
-
-
-
-
 
 

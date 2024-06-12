@@ -1,0 +1,63 @@
+
+SGD
+Batch size: 1, Learning rate: 2, Momentum: 0
+Early stopping at epoch 1
+10000
+Accuracy: 10.00%
+Batch size: 1, Learning rate: 2, Momentum: 0.9
+Early stopping at epoch 3
+10000
+Accuracy: 10.00%
+Batch size: 1, Learning rate: 0.002, Momentum: 0
+10000
+Accuracy: 27.57%
+Batch size: 1, Learning rate: 0.002, Momentum: 0.9
+Early stopping at epoch 11
+10000
+Accuracy: 18.81%
+Batch size: 1, Learning rate: 1e-05, Momentum: 0
+10000
+Accuracy: 10.00%
+Batch size: 1, Learning rate: 1e-05, Momentum: 0.9
+10000
+Accuracy: 11.88%
+Batch size: 64, Learning rate: 2, Momentum: 0
+Early stopping at epoch 5
+10000
+Accuracy: 10.00%
+Batch size: 64, Learning rate: 2, Momentum: 0.9
+Early stopping at epoch 5
+10000
+Accuracy: 10.00%
+Batch size: 64, Learning rate: 0.002, Momentum: 0
+10000
+Accuracy: 33.44%
+Batch size: 64, Learning rate: 0.002, Momentum: 0.9
+10000
+Accuracy: 48.54%
+Batch size: 64, Learning rate: 1e-05, Momentum: 0
+10000
+Accuracy: 10.04%
+Batch size: 64, Learning rate: 1e-05, Momentum: 0.9
+10000
+Accuracy: 14.42%
+Batch size: 256, Learning rate: 2, Momentum: 0
+Early stopping at epoch 12
+10000
+Accuracy: 10.00%
+Batch size: 256, Learning rate: 2, Momentum: 0.9
+Early stopping at epoch 5
+10000
+Accuracy: 10.00%
+Batch size: 256, Learning rate: 0.002, Momentum: 0
+10000
+Accuracy: 19.74%
+Batch size: 256, Learning rate: 0.002, Momentum: 0.9
+10000
+Accuracy: 41.96%
+Batch size: 256, Learning rate: 1e-05, Momentum: 0
+10000
+Accuracy: 9.91%
+Batch size: 256, Learning rate: 1e-05, Momentum: 0.9
+10000
+Accuracy: 15.67%

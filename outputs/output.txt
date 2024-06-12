@@ -1,0 +1,157 @@
+
+SGD
+Batch size: 1, Learning rate: 2, Momentum: 0
+Early stopping at epoch 1
+10000
+Accuracy: 10.00%
+LOSS MISMATCH nan nan At 8 8
+900 900 900
+TRAJECTORY COMPUTED
+8 8 8 900
+test  (nan, nan, 0)
+Batch size: 1, Learning rate: 2, Momentum: 0.9
+Early stopping at epoch 1
+10000
+Accuracy: 10.00%
+LOSS MISMATCH nan nan At 8 8
+900 900 900
+TRAJECTORY COMPUTED
+8 8 8 900
+test  (nan, nan, 0)
+Batch size: 1, Learning rate: 0.002, Momentum: 0
+Early stopping at epoch 20
+10000
+Accuracy: 27.04%
+TRAJECTORY COMPUTED
+6000 6000 6000 18000
+test  (0.0, 0.0, 0)
+Batch size: 1, Learning rate: 0.002, Momentum: 0.9
+Early stopping at epoch 6
+10000
+Accuracy: 16.44%
+TRAJECTORY COMPUTED
+5400 5400 5400 5400
+test  (0.0, 0.0, 0)
+Batch size: 1, Learning rate: 1e-05, Momentum: 0
+Early stopping at epoch 8
+10000
+Accuracy: 10.00%
+TRAJECTORY COMPUTED
+6000 6000 6000 7200
+test  (0.0, 0.0, 0)
+Batch size: 1, Learning rate: 1e-05, Momentum: 0.9
+10000
+Accuracy: 11.58%
+TRAJECTORY COMPUTED
+6000 6000 6000 18000
+test  (0.0, 0.0, 0)
+Batch size: 64, Learning rate: 2, Momentum: 0
+Early stopping at epoch 4
+10000
+Accuracy: 10.00%
+TRAJECTORY COMPUTED
+2808 2808 2808 2808
+test  (0.0, 0.0, 0)
+Batch size: 64, Learning rate: 2, Momentum: 0.9
+Early stopping at epoch 4
+10000
+Accuracy: 10.00%
+TRAJECTORY COMPUTED
+2808 2808 2808 2808
+test  (0.0, 0.0, 0)
+Batch size: 64, Learning rate: 0.002, Momentum: 0
+10000
+Accuracy: 34.64%
+TRAJECTORY COMPUTED
+6000 6000 6000 14040
+test  (0.0, 0.0, 0)
+Batch size: 64, Learning rate: 0.002, Momentum: 0.9
+10000
+Accuracy: 48.16%
+TRAJECTORY COMPUTED
+6000 6000 6000 14040
+test  (0.0, 0.0, 0)
+Batch size: 64, Learning rate: 1e-05, Momentum: 0
+Early stopping at epoch 4
+10000
+Accuracy: 10.00%
+TRAJECTORY COMPUTED
+2808 2808 2808 2808
+test  (0.0, 0.0, 0)
+Batch size: 64, Learning rate: 1e-05, Momentum: 0.9
+10000
+Accuracy: 15.19%
+TRAJECTORY COMPUTED
+6000 6000 6000 14040
+test  (0.0, 0.0, 0)
+Batch size: 256, Learning rate: 2, Momentum: 0
+Early stopping at epoch 5
+10000
+Accuracy: 10.00%
+TRAJECTORY COMPUTED
+855 855 855 855
+test  (0.0, 0.0, 0)
+Batch size: 256, Learning rate: 2, Momentum: 0.9
+Early stopping at epoch 4
+10000
+Accuracy: 10.00%
+TRAJECTORY COMPUTED
+684 684 684 684
+test  (0.0, 0.0, 0)
+Batch size: 256, Learning rate: 0.002, Momentum: 0
+10000
+Accuracy: 17.92%
+TRAJECTORY COMPUTED
+3420 3420 3420 3420
+test  (0.0, 0.0, 0)
+Batch size: 256, Learning rate: 0.002, Momentum: 0.9
+10000
+Accuracy: 41.34%
+TRAJECTORY COMPUTED
+3420 3420 3420 3420
+test  (0.0, 0.0, 0)
+Batch size: 256, Learning rate: 1e-05, Momentum: 0
+Early stopping at epoch 4
+10000
+Accuracy: 9.99%
+TRAJECTORY COMPUTED
+684 684 684 684
+test  (0.0, 0.0, 0)
+Batch size: 256, Learning rate: 1e-05, Momentum: 0.9
+10000
+Accuracy: 10.14%
+TRAJECTORY COMPUTED
+3420 3420 3420 3420
+test  (0.0, 0.0, 0)
+
+GD
+Early stopping at epoch 6
+10000
+Accuracy: 10.00%
+LOSS MISMATCH 2.301206588745117 2.301241874694824 At 1 5000
+45000 45000 6
+TRAJECTORY COMPUTED
+1 1 1 6
+test  (0.0, 0.0, 0)
+Early stopping at epoch 15
+10000
+Accuracy: 10.00%
+LOSS MISMATCH 2.3067564964294434 2.3064024448394775 At 1 5000
+45000 45000 15
+TRAJECTORY COMPUTED
+1 1 1 15
+test  (0.0, 0.0, 0)
+Early stopping at epoch 4
+10000
+Accuracy: 11.01%
+LOSS MISMATCH 2.307213544845581 2.30733585357666 At 1 5000
+45000 45000 4
+TRAJECTORY COMPUTED
+1 1 1 4
+test  (0.0, 0.0, 0)
+
+ADAM
+Early stopping at epoch 17
+TRAJECTORY COMPUTED
+6000 6000 6000 11934
+test  (0.0, 0.0, 0)

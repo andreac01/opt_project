@@ -16,7 +16,12 @@ def main():
 	directory = './plots/'
 
 	while True:
-		pickle_files = sorted(list_pickle_files(directory))
+		pickle_files = []
+		for root, dirs, files in os.walk(directory):
+			for file in files:
+				if file.endswith('.pickle'):
+					pickle_files.append(os.path.join(root, file))
+		pickle_files = sorted(pickle_files)
 		
 		if not pickle_files:
 			print("No .pickle files found in the directory.")
@@ -35,7 +40,7 @@ def main():
 			
 			if 1 <= choice <= len(pickle_files):
 				chosen_file = pickle_files[choice - 1]
-				load_and_show_pickle_file(os.path.join(directory, chosen_file))
+				load_and_show_pickle_file(chosen_file)
 			else:
 				print("Invalid choice. Please try again.")
 		

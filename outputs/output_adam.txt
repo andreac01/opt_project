@@ -1,0 +1,7 @@
+
+ADAM
+Early stopping at epoch 18
+Accuracy: 47.36%
+TRAJECTORY COMPUTED
+6000 6000 6000 12636
+test  (0.0, 0.0, 0)
