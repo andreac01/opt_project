@@ -186,4 +186,83 @@ def next_trajectory_point(model, theta, d1, d2, losses):
     beta = sum(torch.sum((param.data - theta_p) * d2_p).item() for param, theta_p, d2_p in zip(model.parameters(), theta, d2))
     return (alpha, beta, losses)
 
+def plot_loss(model, criterion, data, target, n_points=40, epsilon=4, name='loss_surface', directory='./plots/plain2D/'):
+    model.eval()
+    # Generate direction vectors
+    theta, d1, d2 = get_deltas(model)
+
+    # Create mesh grid
+    alphas = np.linspace(-epsilon, epsilon, n_points)
+    betas = np.linspace(-epsilon, epsilon, n_points)
+    loss_surface = np.zeros((n_points, n_points))
+    
+    for i, alpha in enumerate(alphas):
+        for j, beta in enumerate(betas):
+            # Perturb parameters
+            for param, d1_p, d2_p in zip(model.parameters(), d1, d2):
+                param.data = param.data + alpha * d1_p + beta * d2_p
+            
+            # Calculate loss
+            output = model(data)
+            loss = criterion(output, target)
+            loss_surface[i, j] = loss.item()
+            
+            # Reset parameters
+            for param, theta_p in zip(model.parameters(), theta):
+                param.data = theta_p.clone()
+    
+    # Plot loss surface
+    X, Y = np.meshgrid(alphas, betas)
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    temp = ax.contourf(X, Y, loss_surface, levels=50, cmap='viridis')
+    plt.colorbar(temp, ax=ax, orientation='vertical')
+
+    ax.set_xlabel('Alpha')
+    ax.set_ylabel('Beta')
+    ax.set_title('Loss Surface')
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+    name = directory + name
+    save_plot(fig, svg_filename=name+'.svg', pickle_filename=name+'.fig.pickle')
+
+def plot_loss_3d(model, criterion, data, target, n_points=40, epsilon=4, name='loss_surface', directory='./plots/plain3D/'):
+    model.eval()
+    # Generate direction vectors
+    theta, d1, d2 = get_deltas(model)
+
+    # Create mesh grid
+    alphas = np.linspace(-epsilon, epsilon, n_points)
+    betas = np.linspace(-epsilon, epsilon, n_points)
+    loss_surface = np.zeros((n_points, n_points))
+
+    for i, alpha in enumerate(alphas):
+        for j, beta in enumerate(betas):
+            # Perturb parameters
+            for param, d1_p, d2_p in zip(model.parameters(), d1, d2):
+                param.data = param.data + alpha * d1_p + beta * d2_p
+            
+            # Calculate loss
+            output = model(data)
+            loss = criterion(output, target)
+            loss_surface[i, j] = loss.item()
+            
+            # Reset parameters
+            for param, theta_p in zip(model.parameters(), theta):
+                param.data = theta_p.clone()
+    # Plot loss surface
+    X, Y = np.meshgrid(alphas, betas)
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+    ax.plot_surface(X, Y, loss_surface, cmap='viridis', alpha=0.7)
+    ax.set_xlabel('Alpha')
+    ax.set_ylabel('Beta')
+    ax.set_zlabel('Loss')
+    plt.title('Loss Surface')
+
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+    name = directory + name
+    save_plot(fig, svg_filename=name+'.svg', pickle_filename=name+'.fig.pickle')
+
 

@@ -7,9 +7,9 @@ from matplotlib.pyplot import close
 ######################## SGD #########################
 ######################################################
 print('\nSGD')
-for batch_size in [1, 64, 256]:
-	for learning_rate in [2, 2e-3, 1e-5]:
-		for momentum in [0, 0.9]:
+for batch_size in [64]:#[1, 64, 256]:
+	for learning_rate in [2e-3]:#[2, 2e-3, 1e-5]:
+		for momentum in [0.9]:
 			print(f"Batch size: {batch_size}, Learning rate: {learning_rate}, Momentum: {momentum}")
 			# Create an instance of the model
 			model = SimpleNN()
@@ -41,10 +41,10 @@ for batch_size in [1, 64, 256]:
 			model.train()
 
 			# Plot3d mbatch loss
-			data = test_inputs[:64]
-			target = test_labels[:64]
+			data = inputs[:1024] #1024
+			target = labels[:1024] #1024
 			train_size = int(settings.training_split * inputs_length)
-			#trajectory = get_loss_surface_3Dplot(model, settings.criterion, data, target, losses=losses, initial_model=model_copy, optimizer=optimizer_copy, training_inputs=inputs[:train_size], labels=labels[:train_size], batch_size=batch_size)
+			trajectory = get_loss_surface_3Dplot(model, settings.criterion, data, target, losses=losses, initial_model=model_copy, optimizer=optimizer_copy, training_inputs=inputs[:train_size], labels=labels[:train_size], batch_size=batch_size)
 			# Plot2d mbatch loss
-			#get_loss_surface_plot(model, settings.criterion, data, target, losses=losses, optimizer=optimizer_copy, training_inputs=inputs[:train_size], labels=labels[:train_size], batch_size=batch_size, trajectory=trajectory)
-			#close('all')
+			get_loss_surface_plot(model, settings.criterion, data, target, losses=losses, optimizer=optimizer_copy, training_inputs=inputs[:train_size], labels=labels[:train_size], batch_size=batch_size, trajectory=trajectory)
+			close('all')

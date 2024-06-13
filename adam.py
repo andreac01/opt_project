@@ -12,8 +12,8 @@ model_copy = SimpleNN()
 model_copy.load_state_dict(model.state_dict())
 
 # Define the optimizer
-optimizer = optim.Adam(model.parameters(), lr=0.0005)
-optimizer_copy = optim.Adam(model_copy.parameters(), lr=0.0005)
+optimizer = optim.Adam(model.parameters())
+optimizer_copy = optim.Adam(model_copy.parameters())
 
 # Train the model
 inputs, labels = get_data_train()
@@ -30,8 +30,8 @@ test_model(model, test_inputs, test_labels)
 model.train()
 
 # Plot3d mbatch loss
-data = test_inputs[:256]
-target = test_labels[:256]
+data = inputs[:1024]
+target = labels[:1024]
 train_size = int(settings.training_split * inputs_length)
 trajectory = get_loss_surface_3Dplot(model, settings.criterion, data, target, losses=losses, initial_model=model_copy, optimizer=optimizer_copy, training_inputs=inputs[:train_size], labels=labels[:train_size], batch_size=settings.batch_size)
 # Plot2d mbatch loss
