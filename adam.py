@@ -36,6 +36,6 @@ train_size = int(settings.training_split * inputs_length)
 trajectory = get_loss_surface_3Dplot(model, settings.criterion, data, target, losses=losses, initial_model=model_copy, optimizer=optimizer_copy, training_inputs=inputs[:train_size], labels=labels[:train_size], batch_size=settings.batch_size)
 # Plot2d mbatch loss
 get_loss_surface_plot(model, settings.criterion, data, target, losses=losses, optimizer=optimizer_copy, training_inputs=inputs[:train_size], labels=labels[:train_size], batch_size=settings.batch_size, trajectory=trajectory)
-# close('all')
+close('all')
 
 

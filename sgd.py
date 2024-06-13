@@ -7,9 +7,9 @@ from matplotlib.pyplot import close
 ######################## SGD #########################
 ######################################################
 print('\nSGD')
-for batch_size in [64]:#[1, 64, 256]:
-	for learning_rate in [2e-3]:#[2, 2e-3, 1e-5]:
-		for momentum in [0.9]:
+for batch_size in [1, 64, 256]:
+	for learning_rate in [2, 2e-3, 1e-5]:
+		for momentum in [0, 0.9]:
 			print(f"Batch size: {batch_size}, Learning rate: {learning_rate}, Momentum: {momentum}")
 			# Create an instance of the model
 			model = SimpleNN()

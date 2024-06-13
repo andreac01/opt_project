@@ -40,27 +40,6 @@ test_model(model, test_inputs, test_labels)
 model.train()
 
 
-# for i in range(5):
-# 	# Plot3d mbatch loss
-# 	data = inputs[i:i+1]
-# 	target = labels[i:i+1]
-# 	plot_loss_3d(model, settings.criterion, data, target, name=f'el-{i}-partial', directory='./plots/plain3D/Batch-1')
-# 	plot_loss(model, settings.criterion, data, target, name=f'el-{i}-partial', directory='./plots/plain2D/Batch-1')
-# 	plt.close('all')
-
-# ######################################################
-# ############### Loss approx. Test ####################
-# ######################################################
-
-
-# # Plot3d mbatch loss
-# data = test_inputs
-# target = test_labels
-# train_size = int(settings.training_split * inputs_length)
-# plot_loss_3d(model, settings.criterion, data, target, name='Test')
-# # Plot2d mbatch loss
-# plot_loss(model, settings.criterion, data, target, name='Test')
-
 # ######################################################
 # ############### Loss approx. batches ####################
 # ######################################################
